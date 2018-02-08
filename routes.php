@@ -9,7 +9,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 /**
  * Zendesk Reports Extractor Endpoints
 */
-$app->group('/v1/zendeskreports', function () {
-    $this->get('', App\V1\Zendeskreports::class . ':get');
-    $this->get('/cache', App\V1\Zendeskreports::class . ':getcache');
+$app->group('/v1/zendesk', function () {
+    $this->get('/tickets', App\V1\Zendeskreports::class . ':gettickets');
+    $this->get('/users', App\V1\Zendeskreports::class . ':getusers');
 });

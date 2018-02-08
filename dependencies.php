@@ -1,5 +1,6 @@
 <?php
 use \Lib\PDOFilter as Filter;
+use App\V1\Zendeskreports;
 
 /**
  * Set PDO container
@@ -26,10 +27,6 @@ $container['user'] = function ($container) {
 /**
  * Resolves container dependencies for endpoints classes
 */
-$container['App\V1\Articles'] = function ($c) {
-    return new App\V1\Articles($c->get('pdo'), $c->get('user'));
-};
-
-$container['App\V1\Categories'] = function ($c) {
-    return new App\V1\Categories($c->get('pdo'), $c->get('user'));
+$container['App\V1\Zendeskreports'] = function ($c) {
+    return new App\V1\Zendeskreports($c->get('pdo'));
 };

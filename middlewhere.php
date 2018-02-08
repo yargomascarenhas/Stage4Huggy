@@ -42,7 +42,7 @@ $app->add(function(Request $request, Response $response, $next) {
 $app->add(new \Slim\Middleware\JwtAuthentication([
     "header" => "Authorization",
     "path" => ["/v1"],
-    "passthrough" => ["/v1/zendeskreports"],
+    "passthrough" => ["/v1/zendesk"],
     "secret" => $_SERVER['JWT_SECURE'],
     "secure" => false,
     "callback" => function ($request, $response, $arguments) use ($container) {

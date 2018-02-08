@@ -16,10 +16,10 @@ $_SERVER['ZENDESK_TOKEN'] = 'VI6zeMe6CCGu9hbYhMfZ57MG68wb0fW0oZtNoii6'; // < ---
 // local server configuration
 if(strpos($_SERVER['SERVER_NAME'], 'localhost') !== false || strpos($_SERVER['SERVER_NAME'], '192.168') !== false){
 
-    $_SERVER['MYSQL_HOST'] = 'localhost';
+    $_SERVER['MYSQL_HOST'] = 'localhost';   // <--- change host if u need
     $_SERVER['MYSQL_PORT'] = '3306';
-    $_SERVER['MYSQL_USER'] = 'root';
-    $_SERVER['MYSQL_PASS'] = '';
+    $_SERVER['MYSQL_USER'] = 'root';        // <--- change user database if u need
+    $_SERVER['MYSQL_PASS'] = '';            // <--- change password if u need
     $_SERVER['MYSQL_BASE'] = 'stage4huggy';
 
     define('SERVER', 'L');
