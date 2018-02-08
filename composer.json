@@ -1,0 +1,16 @@
+{
+    "minimum-stability": "RC",
+    "require": {
+        "slim/slim": "3.*",
+        "tuupola/slim-jwt-auth": "^2.3",
+        "guzzlehttp/guzzle": "^6.2",
+        "zendesk/zendesk_api_client_php": "^2.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/",
+            "App\\V1\\": "src/v1",
+            "Lib\\": "lib/"
+        }
+    }
+}
