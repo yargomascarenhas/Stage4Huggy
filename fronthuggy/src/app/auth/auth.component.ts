@@ -6,9 +6,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AuthComponent implements OnInit {
 
+  public forgot:boolean = false;
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  public forgotPwd() {
+    this.forgot = (this.forgot == true) ? false : true;
   }
 
 }
