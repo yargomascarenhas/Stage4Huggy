@@ -23,7 +23,20 @@ export class AuthComponent implements OnInit {
   }
 
   public login() {
-    console.log(this.email, this.password);
+    this.api.post('v1/users/login', {
+      login: this.email,
+      password: this.password
+    })
+    .subscribe(
+    (res) => {
+      console.log(res);
+      // set localstorage
+      // enter
+    },
+    (err) => {
+      console.error(err);
+      // display error
+    });
     return false;
   }
 

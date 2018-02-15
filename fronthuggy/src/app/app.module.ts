@@ -1,3 +1,4 @@
+import { FooterComponent } from './global/footer/footer.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -7,10 +8,17 @@ import { AuthModule } from "./auth/auth.module";
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { FormsModule  } from "@angular/forms";
+import { NavigationComponent } from './global/navigation/navigation.component';
+import { ScreenComponent } from './global/screen/screen.component';
+import { TopnavbarComponent } from './global/topnavbar/topnavbar.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    FooterComponent,
+    NavigationComponent,
+    ScreenComponent,
+    TopnavbarComponent
   ],
   imports: [
     BrowserModule,
