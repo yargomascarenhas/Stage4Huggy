@@ -37,31 +37,7 @@ final class Zendeskreports{
                 $tickets = $ticketsapi->tickets;
 
                 foreach($tickets as $ticket) {
-
-                    $query = "SELECT IF(COUNT(1)>0, TRUE, FALSE) AS exist FROM ticket WHERE api_id = :api_id";
-                    $stmt = $this->pdo->prepare($query);
-                    $stmt->execute([':api_id' => $ticket->id]);
-                    $result = $stmt->fetchAll();
-
-                    $params = [
-                        ':api_id' => $ticket->id,
-                        ':assignee_id' => (int) $ticket->assignee_id,
-                        ':subject' => $ticket->subject,
-                        ':description' => $ticket->description,
-                        ':priority' => $ticket->priority,
-                        ':status' => $ticket->status,
-                        ':type' => $ticket->type,
-                        ':created_at' => $ticket->created_at,
-                        ':updated_at' => $ticket->updated_at
-                    ];
-
-                    // If not exists insert a new ticket
-                    if($result[0]['exist'] === '0') {
-                        $this->ticketAdd($params);
-                    } else {
-                        // Update ticket if exists
-                        $this->ticketUpd($params);
-                    }
+                    \App\V1\Tickets::syncTicket($ticket);
                 }
             } else {
                 throw new Exception('No users finded');
@@ -78,57 +54,6 @@ final class Zendeskreports{
     }
 
     /**
-     * Insert ticket register in database
-     *
-     * @param array $params
-    */
-    private function ticketAdd(Array $params) {
-        $query = "INSERT INTO ticket (
-                    api_id,
-                    assignee_id,
-                    subject,
-                    description,
-                    priority,
-                    status,
-                    type,
-                    created_at,
-                    updated_at
-                ) VALUES (
-                    :api_id,
-                    :assignee_id,
-                    :subject,
-                    :description,
-                    :priority,
-                    :status,
-                    :type,
-                    :created_at,
-                    :updated_at
-                )";
-        $stmt = $this->pdo->prepare($query);
-        $stmt->execute($params);
-    }
-
-    /**
-     * Update ticket register in database
-     *
-     * @param array $params
-    */
-    private function ticketUpd(Array $params) {
-        $query = "UPDATE ticket
-                SET assignee_id = :assignee_id,
-                    subject = :subject,
-                    description = :description,
-                    priority = :priority,
-                    status = :status,
-                    type = :type,
-                    created_at = :created_at,
-                    updated_at = :updated_at
-                WHERE api_id = :api_id";
-        $stmt = $this->pdo->prepare($query);
-        $stmt->execute($params);
-    }
-
-    /**
      * Get Users and Save in Database
      * Filter the fields passed for params
      * @param \Psr\Http\Message\ServerRequestInterface $request
@@ -142,30 +67,13 @@ final class Zendeskreports{
         $ret = [];
 
         try {
-
             $usersapi = $this->zendesk->users()->findAll();
 
             if(!empty($usersapi->users)) {
                 $users = $usersapi->users;
 
                 foreach($users as $user) {
-
-                    $user_id = $user->id;
-
-                    $query = "SELECT IF(COUNT(1)>0, TRUE, FALSE) AS exist FROM user WHERE api_id = :api_id";
-                    $stmt = $this->pdo->prepare($query);
-                    $stmt->execute([':api_id' => $user_id]);
-                    $result = $stmt->fetchAll();
-
-                    $params = [
-                        ':api_id' => (int) $user_id,
-                        ':name' => $user->name
-                    ];
-
-                    // If not exists insert a new user
-                    if($result[0]['exist'] === '0') {
-                        $this->userAdd($params);
-                    }
+                    \App\V1\Users::syncUser($user);
                 }
             } else {
                 throw new Exception('No users finded');
@@ -179,22 +87,5 @@ final class Zendeskreports{
         }
 
         return $response->withJson($ret)->withStatus($ret['code']);
-    }
-
-    /**
-     * Insert user register in database
-     *
-     * @param array $params
-    */
-    private function userAdd(Array $params) {
-        $query = "INSERT INTO user (
-                    api_id,
-                    name
-                ) VALUES (
-                    :api_id,
-                    :name
-                )";
-        $stmt = $this->pdo->prepare($query);
-        $stmt->execute($params);
     }
 }

@@ -30,3 +30,12 @@ $container['user'] = function ($container) {
 $container['App\V1\Zendeskreports'] = function ($c) {
     return new App\V1\Zendeskreports($c->get('pdo'));
 };
+$container['App\V1\Users'] = function ($c) {
+    return new App\V1\Users($c->get('pdo'));
+};
+$container['App\V1\Tickets'] = function ($c) {
+    return new App\V1\Tickets($c->get('pdo'));
+};
+$container['App\V1\Organizations'] = function ($c) {
+    return new App\V1\Organizations($c->get('pdo'));
+};
