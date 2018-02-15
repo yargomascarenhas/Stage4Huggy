@@ -88,4 +88,40 @@ final class Zendeskreports{
 
         return $response->withJson($ret)->withStatus($ret['code']);
     }
+
+    /**
+     * Get Users and Save in Database
+     * Filter the fields passed for params
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface      $response
+     * @param array                                    $args
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+    */
+    public function getorganizations(Request $request, Response $response, $args){
+        $queryParams = $request->getQueryParams();
+        $ret = [];
+
+        try {
+            $organizationsapi = $this->zendesk->organizations()->findAll();
+
+            if(!empty($organizationsapi->organizations)) {
+                $organizations = $organizationsapi->organizations;
+
+                foreach($organizations as $organization) {
+                    \App\V1\organizations::syncOrganization($organization);
+                }
+            } else {
+                throw new Exception('No organizations finded');
+            }
+
+            $ret['data'] = $organizations;
+            $ret['code'] = HC_SUCCESS;
+        } catch(Exception $e) {
+            $ret['code'] = HC_API_ERROR;
+            $ret['message'] = $e->getMessage();
+        }
+
+        return $response->withJson($ret)->withStatus($ret['code']);
+    }
 }
