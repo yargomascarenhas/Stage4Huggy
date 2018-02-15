@@ -6,6 +6,7 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \Lib\PDOFilter as Filter;
 use \Lib\Pagination as Pagination;
+use \Firebase\JWT\JWT as JWT;
 use Exception;
 
 final class Users extends Pagination{
@@ -126,12 +127,12 @@ final class Users extends Pagination{
 
             $param = [
                 ':login' => $body['login'],
-                ':password' => $body['password']
+                ':password' => sha1($body['password'])
             ];
 
             $query = "SELECT IF(COUNT(1)>0, TRUE, FALSE) AS exist, id
                       FROM user
-                      WHERE email = :email
+                      WHERE email = :login
                         AND password = :password";
             $stmt = $this->pdo->prepare($query);
             $stmt->execute($param);
