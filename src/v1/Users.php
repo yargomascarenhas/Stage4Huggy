@@ -20,7 +20,7 @@ final class Users{
     public function syncUser($user) {
         $user_id = $user->id;
 
-        $query = "SELECT IF(COUNT(1)>0, TRUE, FALSE) AS exist FROM user WHERE api_id = :api_id";
+        $query = "SELECT IF(COUNT(1)>0, TRUE, FALSE) AS exist, updated_at FROM user WHERE api_id = :api_id";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute([':api_id' => $user_id]);
         $result = $stmt->fetchAll();
@@ -30,69 +30,17 @@ final class Users{
             ':name' => $user->name,
             ':email' => $user->email,
             ':password' => sha1('123456'),
-            ':perfil' => $user->role
+            ':perfil' => $user->role,
+            ':updated_at' => $user->updated_at
         ];
 
         // If not exists insert a new user
         if($result[0]['exist'] === '0') {
-            $this->userAdd($params);
+            Users::userAdd($params);
+        } else if(date_format(date_create($result[0]['updated_at']), 'YmdHis') !=
+            date_format(date_create($user->updated_at), 'YmdHis')) {
+            Users::userUpdate($params);
         }
-    }
-
-    /**
-     * Get Users and Save in Database
-     * Filter the fields passed for params
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface      $response
-     * @param array                                    $args
-     *
-     * @return \Psr\Http\Message\ResponseInterface
-    */
-    public function getusers(Request $request, Response $response, $args){
-        $queryParams = $request->getQueryParams();
-        $ret = [];
-
-        try {
-
-            $usersapi = $this->zendesk->users()->findAll();
-
-            if(!empty($usersapi->users)) {
-                $users = $usersapi->users;
-
-                foreach($users as $user) {
-
-                    $user_id = $user->id;
-
-                    $query = "SELECT IF(COUNT(1)>0, TRUE, FALSE) AS exist FROM user WHERE api_id = :api_id";
-                    $stmt = $this->pdo->prepare($query);
-                    $stmt->execute([':api_id' => $user_id]);
-                    $result = $stmt->fetchAll();
-
-                    $params = [
-                        ':api_id' => (int) $user_id,
-                        ':name' => $user->name,
-                        ':email' => $user->email,
-                        ':password' => sha1('123456'),
-                        ':perfil' => $user->role
-                    ];
-
-                    // If not exists insert a new user
-                    if($result[0]['exist'] === '0') {
-                        $this->userAdd($params);
-                    }
-                }
-            } else {
-                throw new Exception('No users finded');
-            }
-
-            $ret['data'] = $users;
-            $ret['code'] = HC_SUCCESS;
-        } catch(Exception $e) {
-            $ret['code'] = HC_API_ERROR;
-            $ret['message'] = $e->getMessage();
-        }
-
-        return $response->withJson($ret)->withStatus($ret['code']);
     }
 
     /**
@@ -100,20 +48,39 @@ final class Users{
      *
      * @param array $params
     */
-    private function userAdd(Array $params) {
+    public function userAdd(Array $params) {
         $query = "INSERT INTO user (
                     api_id,
                     name,
                     email,
                     password,
-                    perfil
+                    perfil,
+                    updated_at
                 ) VALUES (
                     :api_id,
                     :name,
                     :email,
                     :password,
-                    :perfil
+                    :perfil,
+                    :updated_at
                 )";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute($params);
+    }
+
+    /**
+     * Update user register in database
+     *
+     * @param array $params
+    */
+    public function userUpdate(Array $params) {
+        $query = "UPDATE user
+                  SET name = :name,
+                      email = :email,
+                      password = :password,
+                      perfil = :perfil,
+                      updated_at = :updated_at
+                  WHERE api_id = :api_id";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute($params);
     }

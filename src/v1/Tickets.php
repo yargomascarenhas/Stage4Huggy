@@ -47,11 +47,11 @@ final class Tickets{
 
         // If not exists insert a new ticket
         if($result[0]['exist'] === '0') {
-            $this->ticketAdd($params);
+            \App\V1\Tickets::ticketAdd($params);
         } else if(date_format(date_create($result[0]['updated_at']), 'YmdHis') !=
             date_format(date_create($ticket->updated_at), 'YmdHis')) {
             //Sync tickets verfying by updated_at
-            $this->ticketUpd($params);
+            \App\V1\Tickets::ticketUpd($params);
         }
     }
 
@@ -107,6 +107,7 @@ final class Tickets{
                     priority = :priority,
                     status = :status,
                     type = :type,
+                    created_at = :created_at,
                     updated_at = :updated_at,
                     requester_id = :requester_id,
                     organization_id = :organization_id,
