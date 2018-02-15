@@ -4,6 +4,9 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppRouting } from './app.routing';
 import { AppComponent } from './app.component';
 import { AuthModule } from "./auth/auth.module";
+import { HttpClientModule } from '@angular/common/http';
+import { HttpModule } from '@angular/http';
+import { FormsModule  } from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -11,6 +14,9 @@ import { AuthModule } from "./auth/auth.module";
   ],
   imports: [
     BrowserModule,
+    FormsModule,
+    HttpModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     AppRouting,
     AuthModule
