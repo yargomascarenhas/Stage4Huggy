@@ -1,6 +1,7 @@
 import { Router } from '@angular/router';
 import { ApiService } from './../global/api.service';
 import { Component, OnInit } from '@angular/core';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-auth',
@@ -37,8 +38,8 @@ export class AuthComponent implements OnInit {
       this.router.navigate(['/home']);
     },
     (err) => {
-      console.error(err);
       // display error
+      swal('Erro', 'Usuário e senha inválidos', 'error');
     });
     return false;
   }
