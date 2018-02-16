@@ -170,6 +170,106 @@ final class Tickets extends Pagination{
     }
 
     /**
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface      $response
+     * @param array                                    $args
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+    */
+    public function groupStatus(Request $request, Response $response, $args){
+        $ret = [];
+
+        $filter = new Filter();
+
+        try {
+            $queryParams = $request->getQueryParams();
+
+            $where = $filter->getWhere();
+            $param = $filter->getParam();
+
+            $id = empty($id) ? $request->getAttribute('route')->getArgument('id') : $id;
+
+            $query = "SELECT
+                        COUNT(1) AS total,
+                        status
+                    FROM vw_ticket " . $filter->getWhere()
+                    . " GROUP BY status";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute($filter->getParam());
+            $result = $stmt->fetchAll();
+
+            $ret['code'] = HC_SUCCESS;
+            $ret['data'] = [];
+
+            if(count($result) > 0){
+                foreach($result as $reg){
+                    $ret['data'][] =
+                    [
+                        'status' => $reg['status'],
+                        'total' => $reg['total']
+                    ];
+                }
+            }
+        } catch (Exception $e) {
+            $ret['code'] = HC_API_ERROR;
+            $ret['error']['message'] = $e->getMessage();
+        }
+
+        return $response->withJson($ret)->withStatus($ret['code']);
+    }
+
+
+    /**
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface      $response
+     * @param array                                    $args
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+    */
+    public function groupSatisfaction(Request $request, Response $response, $args){
+        $ret = [];
+
+        $filter = new Filter();
+        $filter->addFilter('AND satisfaction_rating IS NOT NULL');
+
+        try {
+            $queryParams = $request->getQueryParams();
+
+            $where = $filter->getWhere();
+            $param = $filter->getParam();
+
+            $id = empty($id) ? $request->getAttribute('route')->getArgument('id') : $id;
+
+            $query = "SELECT
+                        COUNT(1) AS total,
+                        satisfaction_rating
+                    FROM vw_ticket " . $filter->getWhere() .
+                    " GROUP BY satisfaction_rating";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute($filter->getParam());
+            $result = $stmt->fetchAll();
+
+            $ret['code'] = HC_SUCCESS;
+            $ret['data'] = [];
+
+            if(count($result) > 0){
+                foreach($result as $reg){
+                    $ret['data'][] =
+                    [
+                        'satisfaction_rating' => $reg['satisfaction_rating'],
+                        'total' => $reg['total']
+                    ];
+                }
+            }
+        } catch (Exception $e) {
+            $ret['code'] = HC_API_ERROR;
+            $ret['error']['message'] = $e->getMessage();
+        }
+
+        return $response->withJson($ret)->withStatus($ret['code']);
+    }
+
+    /**
      * Syncronize ticket register in database with Zendesk Platform
      *
      * @param object $ticket

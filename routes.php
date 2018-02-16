@@ -30,6 +30,8 @@ $app->group('/v1/users', function () {
 $app->group('/v1/tickets', function () {
     $this->get('', App\V1\Tickets::class . ':get');
     $this->get('/{id:[0-9]+}', App\V1\Tickets::class . ':get');
+    $this->get('/groupstatus', App\V1\Tickets::class . ':groupStatus');
+    $this->get('/groupsatisfaction', App\V1\Tickets::class . ':groupSatisfaction');
 });
 
 
