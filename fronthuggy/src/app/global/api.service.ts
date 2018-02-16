@@ -15,14 +15,12 @@ export class ApiService {
   }
 
   public resetHeaders() {
-    let token: string = JSON.parse(localStorage.getItem('token'));
+    let token: string = localStorage.getItem('token');
     if(token) {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Bearer ' + token);
         this.options = new RequestOptions({headers : headers});
-    } else {
-        // this.events.publish('system:logoff', {}, Date.now());
     }
   }
 
