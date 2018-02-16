@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'navigation',
@@ -6,10 +7,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./navigation.component.css']
 })
 export class NavigationComponent implements OnInit {
-
-  constructor() { }
+  public user:any = {};
+  constructor(public router: Router) {}
 
   ngOnInit() {
+    this.user = (localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')) : {};
   }
 
+  activeRoute(routename: string): boolean{
+    return this.router.url.indexOf(routename) > -1;
+  }
 }
