@@ -9,10 +9,24 @@ export class HomeComponent implements OnInit {
   public page:string = 'Home';
   public titulo:string = 'Tickets';
   public itens:any = [];
-  public filters:any = [];
 	public endpoint:string = 'v1/tickets';
   private next:string = this.endpoint;
   public hasnext:boolean = false;
+  public tipos:any = [{id: null, name: 'Tipo'}];
+  public statuslist:any = [{id: null, name: 'Status'}];
+  public requesterlist: any = [{id: null, name: 'Solicitante'}];
+  public organizationlist: any = [{id: null, name: 'Empresa'}];
+  public prioritylist:any = [{id: null, name: 'Prioridade'}];
+
+  public filtros:any = {
+    id: null,
+    tags: null,
+    type: null,
+    status: null,
+    requester_id: null,
+    organization_id: null,
+    priority: null
+  }
 
   constructor(
     public api: ApiService
@@ -29,10 +43,26 @@ export class HomeComponent implements OnInit {
 		// }
 		this.api.get(this.next)
 		.subscribe((resp) => {
-      console.log(resp);
 			for(let item of resp.data) {
-			  	this.itens.push(item);
+
+        if(!this.exists(this.tipos, item.type, 'id') && item.type) {
+          this.tipos.push({id: item.type, name: item.type});
+        }
+        if(!this.exists(this.statuslist, item.status, 'id') && item.status) {
+          this.statuslist.push({id: item.status, name: item.status});
+        }
+        if(!this.exists(this.requesterlist, item.requester_id, 'id') && item.requester_id) {
+          this.requesterlist.push({id: item.requester_id, name: item.requester_name});
+        }
+        if(!this.exists(this.organizationlist, item.organization_id, 'id') && item.organization_id) {
+          this.organizationlist.push({id: item.organization_id, name: item.organization_name});
+        }
+        if(!this.exists(this.prioritylist, item.priority, 'id') && item.priority) {
+          this.prioritylist.push({id: item.priority, name: item.priority});
+        }
+			  this.itens.push(item);
       }
+
       this.hasnext = (resp._links.next) ? true : false;
 			if(resp._links.next) {
 				this.next = resp._links.next;
@@ -43,4 +73,36 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  private filter() {
+    console.log(this.filtros);
+    let filterstr:string = '';
+    let includefilter = function(key:string, value:string) {
+      let strfil:string = '';
+      if(value != null && value != 'null') {
+        strfil += (filterstr == '') ? '?'+key+'=' + value : '&'+key+'=' + value;
+      }
+      return strfil;
+    }
+
+    filterstr += includefilter('id', this.filtros.id);
+    filterstr += includefilter('tags', this.filtros.tags);
+    filterstr += includefilter('type', this.filtros.type);
+    filterstr += includefilter('status', this.filtros.status);
+    filterstr += includefilter('requester_id', this.filtros.requester_id);
+    filterstr += includefilter('organization_id', this.filtros.organization_id);
+    filterstr += includefilter('priority', this.filtros.priority);
+
+    this.next = this.endpoint + filterstr;
+
+    console.log(this.next);
+    this.itens = [];
+    this.loadItens();
+  }
+
+  private exists(lista:any, value:any, idx?:string) {
+    let exist = lista.filter((dat) => {
+      return (idx) ? dat[idx] == value : dat == value;
+    });
+    return (!exist[0]) ? false : true;
+  }
 }

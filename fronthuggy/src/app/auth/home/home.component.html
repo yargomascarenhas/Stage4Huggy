@@ -40,20 +40,42 @@
                 <div class="ibox-content">
                   <div class="actions">
                     <div class="row">
-                      <div class="col-lg-1 filterinput">
-                        <input type="text" class="form-control" id="cmp_api_id" name="cmp_api_id" placeholder="id">
+                      <div class="col-md-1 filterinput">
+                        <input type="text" class="form-control" id="cmp_api_id" name="cmp_api_id" placeholder="id" [(ngModel)]="filtros.id">
                       </div>
-                      <div class="col-lg-2 filterinput">
-                        <input type="text" class="form-control" id="cmp_tags" name="cmp_tags" placeholder="tags">
+                      <div class="col-md-2 filterinput">
+                        <input type="text" class="form-control" id="cmp_tags" name="cmp_tags" placeholder="Keywords" [(ngModel)]="filtros.tags">
                       </div>
-                      <div class="col-lg-2 filterinput">
-                        <select class="form-control m-b" id="cmp_tipo">
-                          <option>Tipo</option>
+                      <div class="col-md-2 filterinput">
+                        <select class="form-control m-b" id="cmp_tipo" [(ngModel)]="filtros.type">
+                          <option *ngFor="let tipo of tipos" [value]="tipo.id">{{tipo.name}}</option>
                         </select>
                       </div>
-                      <button type="button" class="btn btn-primary btn-md" id="btn_pesquisar">
-                        <i class="fa fa-search"></i>
-                      </button>
+                      <div class="col-md-2 filterinput">
+                        <select class="form-control m-b" id="cmp_status" [(ngModel)]="filtros.status">
+                          <option *ngFor="let status of statuslist" [value]="status.id">{{status.name}}</option>
+                        </select>
+                      </div>
+                      <div class="col-md-2 filterinput">
+                        <select class="form-control m-b" id="cmp_requester" [(ngModel)]="filtros.requester_id">
+                          <option *ngFor="let req of requesterlist" [value]="req.id">{{req.name}}</option>
+                        </select>
+                      </div>
+                      <div class="col-md-2 filterinput">
+                        <select class="form-control m-b" id="cmp_organization" [(ngModel)]="filtros.organization_id">
+                          <option *ngFor="let req of organizationlist" [value]="req.id">{{req.name}}</option>
+                        </select>
+                      </div>
+                      <div class="col-md-2 filterinput btn-overflow">
+                        <select class="form-control m-b" id="cmp_priority" [(ngModel)]="filtros.priority">
+                          <option *ngFor="let req of prioritylist" [value]="req.id">{{req.name}}</option>
+                        </select>
+                      </div>
+                      <div class="col-md-1 filterinput">
+                        <button type="button" class="btn btn-primary btn-md" id="btn_pesquisar" (click)="filter()">
+                          <i class="fa fa-search"></i>
+                        </button>
+                      </div>
                     </div>
                   </div>
                   <table class="table table-striped table-bordered table-hover small m-t-sm tabela" style="">
@@ -69,7 +91,7 @@
                     </thead>
                     <tbody>
                       <tr *ngIf="!itens.length">
-                        <td>Nenhum registro encontrado</td>
+                        <td colspan="6">Nenhum registro encontrado</td>
                       </tr>
                       <tr *ngFor="let item of itens">
                         <td>{{item.api_id}}</td>

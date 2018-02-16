@@ -9,7 +9,7 @@ use \Lib\Pagination as Pagination;
 use Exception;
 
 final class Tickets extends Pagination{
-    private $defaultSort = '-id';
+    private $defaultSort = '-api_id';
     private $dictonary = [
         'api_id' => 'api_id',
         'subject' => 'subject',
@@ -50,6 +50,7 @@ final class Tickets extends Pagination{
             $query = "SELECT
                              api_id,
                              assignee_id,
+                             assignee_name,
                              subject,
                              description,
                              priority,
@@ -58,10 +59,12 @@ final class Tickets extends Pagination{
                              created_at,
                              updated_at,
                              requester_id,
+                             requester_name,
                              organization_id,
+                             organization_name,
                              satisfaction_rating,
                              tags
-                        FROM ticket " . $filter->getWhere();
+                        FROM vw_ticket " . $filter->getWhere();
             $stmt = $this->pdo->prepare($query);
             $stmt->execute($filter->getParam());
             $result = $stmt->fetchAll();
@@ -76,6 +79,7 @@ final class Tickets extends Pagination{
                     [
                         'api_id' => $reg['api_id'],
                         'assignee_id' => $reg['assignee_id'],
+                        'assignee_name' => $reg['assignee_name'],
                         'subject' => $reg['subject'],
                         'description' => $reg['description'],
                         'priority' => $reg['priority'],
@@ -84,7 +88,9 @@ final class Tickets extends Pagination{
                         'created_at' => $reg['created_at'],
                         'updated_at' => $reg['updated_at'],
                         'requester_id' => $reg['requester_id'],
+                        'requester_name' => $reg['requester_name'],
                         'organization_id' => $reg['organization_id'],
+                        'organization_name' => $reg['organization_name'],
                         'satisfaction_rating' => $reg['satisfaction_rating'],
                         'tags'=> $reg['tags']
                     ];
@@ -113,17 +119,50 @@ final class Tickets extends Pagination{
 
         $limit = parent::getLimit($request);
         $filter->setLimit($limit[0], $limit[1]);
-
+        // api_id,
+        // assignee_id,
+        // assignee_name,
+        // subject,
+        // description,
+        // priority,
+        // status,
+        // type,
+        // created_at,
+        // updated_at,
+        // requester_id,
+        // requester_name,
+        // organization_id,
+        // organization_name,
+        // satisfaction_rating,
+        // tags
         $id = $request->getAttribute('route')->getArgument('id');
         if(empty($id)){
             $sort = empty($queryParams['sort']) ? $this->defaultSort : $queryParams['sort'];
             $filter->setOrder(parent::getOrder($sort, $this->dictonary));
 
-            if(!empty($queryParams['description'])){
-                $filter->addFilter('AND description = :description', array(':description' => $queryParams['description']));
+            if(!empty($queryParams['id'])){
+                $filter->addFilter('AND api_id = :id', array(':id' => $queryParams['id']));
+            }
+            if(!empty($queryParams['tags'])){
+                $filter->addFilter('AND FIND_IN_SET(tags, :tags) > 0', array(':tags' => $queryParams['tags']));
+            }
+            if(!empty($queryParams['requester_id'])){
+                $filter->addFilter('AND requester_id = :requester_id', array(':requester_id' => $queryParams['requester_id']));
+            }
+            if(!empty($queryParams['organization_id'])){
+                $filter->addFilter('AND organization_id = :organization_id', array(':organization_id' => $queryParams['organization_id']));
+            }
+            if(!empty($queryParams['priority'])){
+                $filter->addFilter('AND priority = :priority', array(':priority' => $queryParams['priority']));
+            }
+            if(!empty($queryParams['status'])){
+                $filter->addFilter('AND status = :status', array(':status' => $queryParams['status']));
+            }
+            if(!empty($queryParams['type'])){
+                $filter->addFilter('AND type = :type', array(':type' => $queryParams['type']));
             }
         } else {
-            $filter->addFilter('AND id = :id', array(':id' => $id));
+            $filter->addFilter('AND api_id = :id', array(':id' => $id));
         }
 
         $ret = $this->select($filter, $request);

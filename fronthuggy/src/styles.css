@@ -10,3 +10,7 @@
 .btn-nav {
     padding: 4px 11px !important;
 }
+
+.btn-overflow {
+    padding-left: 15px !important;
+}
