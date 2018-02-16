@@ -28,7 +28,6 @@ final class Users extends Pagination{
             $param = $filter->getParam();
 
             $id = empty($id) ? $request->getAttribute('route')->getArgument('id') : $id;
-            // $user_id = (!empty($this->user->user_id)) ? $this->user->user_id : $id;
 
             if(empty($id)) {
                 $filter->setLimit(0, 20);
@@ -99,7 +98,7 @@ final class Users extends Pagination{
         if(empty($id)){
             $sort = empty($queryParams['sort']) ? $this->defaultSort : $queryParams['sort'];
             $filter->setOrder(parent::getOrder($sort, $this->dictonary));
-
+            $filter->addFilter('AND perfil <> "end-user"');
             if(!empty($queryParams['name'])){
                 $filter->addFilter('AND name = :name', array(':name' => $queryParams['name']));
             }

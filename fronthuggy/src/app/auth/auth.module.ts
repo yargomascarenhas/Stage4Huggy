@@ -8,6 +8,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthRouting } from './auth.routing';
 import { AuthComponent } from './auth.component';
+import { UsersComponent } from './users/users.component';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { AuthComponent } from './auth.component';
   declarations: [
     AuthComponent,
     HomeComponent,
-    ReportsComponent
+    ReportsComponent,
+    UsersComponent
   ],
   providers: [ApiService, AuthGuard]
 })

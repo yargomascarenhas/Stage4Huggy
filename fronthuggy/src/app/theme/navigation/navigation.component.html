@@ -16,7 +16,10 @@
           </li>
           <li [ngClass]="{active: activeRoute('relatorios')}" *ngIf="isadmin">
             <a [routerLink]="['/relatorios']"><i class="fa fa-book"></i> <span class="nav-label">Relatórios</span></a>
-        </li>
+          </li>
+          <li [ngClass]="{active: activeRoute('usuarios')}" *ngIf="isadmin">
+            <a [routerLink]="['/usuarios']"><i class="fa fa-user"></i> <span class="nav-label">Usuários</span></a>
+          </li>
       </ul>
 
   </div>

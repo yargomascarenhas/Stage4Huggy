@@ -14,3 +14,11 @@
 .btn-overflow {
     padding-left: 15px !important;
 }
+
+.info-box p{
+    margin: 0;
+}
+
+.info-box {
+    color: #e6e6e6;
+}

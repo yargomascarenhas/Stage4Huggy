@@ -47,6 +47,13 @@ if(strpos($_SERVER['SERVER_NAME'], 'localhost') !== false || strpos($_SERVER['SE
     ];
 
 } else {
+
+    $_SERVER['MYSQL_HOST'] = 'stage4huggy.coza6ysawwae.us-east-1.rds.amazonaws.com';
+    $_SERVER['MYSQL_PORT'] = '3306';
+    $_SERVER['MYSQL_USER'] = 'awsroot';
+    $_SERVER['MYSQL_PASS'] = '12345678';
+    $_SERVER['MYSQL_BASE'] = 'stage4huggy';
+
     // production server configuration
     define('SERVER', 'P');
     define('PHP_TIMEZONE',  'America/Bahia');

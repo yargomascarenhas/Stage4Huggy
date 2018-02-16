@@ -4,7 +4,15 @@
           <h1 class="logo-name">HY</h1>
       </div>
       <h3>Welcome to Huggy DEV Challenge</h3>
-      <p>For Huggy Challenge</p>
+      <div class="text-left info-box">
+        <p>Admin</p>
+        <small>email: yargomascarenhas@gmail.com</small><br>
+        <small>paswd: 123456</small>
+        <p>Agent</p>
+        <small>email: josephkimbler@gmoil.com</small><br>
+        <small>paswd: 123456</small>
+        </div>
+
       <form (submit)="login()" class="m-t" action="" *ngIf="!forgot">
           <div class="form-group">
               <input type="email" class="form-control" name="email" [(ngModel)]="email" placeholder="Username" required="">
