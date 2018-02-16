@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  api: "http://192.168.25.3/Stage4Huggy"
+  api: "http://stage4huggy.us-east-1.elasticbeanstalk.com"
 };
