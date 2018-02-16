@@ -19,6 +19,7 @@ export class AuthComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.logoff();
   }
 
   public forgotPwd() {
@@ -44,6 +45,10 @@ export class AuthComponent implements OnInit {
       swal('Erro', 'Usuário e senha inválidos', 'error');
     });
     return false;
+  }
+
+  private logoff() {
+    localStorage.clear();
   }
 
 }
