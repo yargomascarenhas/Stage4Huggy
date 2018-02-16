@@ -17,6 +17,9 @@ export class HomeComponent implements OnInit {
   public requesterlist: any = [{id: null, name: 'Solicitante'}];
   public organizationlist: any = [{id: null, name: 'Empresa'}];
   public prioritylist:any = [{id: null, name: 'Prioridade'}];
+  public satisfactionlist:any = [{id:null, name: 'Ind. Satisfação'}];
+  public user:any = {};
+  public isadmin:boolean = false;
 
   public filtros:any = {
     id: null,
@@ -25,7 +28,8 @@ export class HomeComponent implements OnInit {
     status: null,
     requester_id: null,
     organization_id: null,
-    priority: null
+    priority: null,
+    satisfaction_rating: null
   }
 
   constructor(
@@ -34,6 +38,10 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.loadItens();
+    this.user = (localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')) : {};
+    if(this.user.perfil) {
+      this.isadmin = (this.user.perfil == 'admin') ? true : false;
+    }
   }
 
   public loadItens() {
@@ -59,6 +67,9 @@ export class HomeComponent implements OnInit {
         }
         if(!this.exists(this.prioritylist, item.priority, 'id') && item.priority) {
           this.prioritylist.push({id: item.priority, name: item.priority});
+        }
+        if(!this.exists(this.satisfactionlist, item.satisfaction_rating, 'id') && item.satisfaction_rating) {
+          this.satisfactionlist.push({id: item.satisfaction_rating, name: item.satisfaction_rating});
         }
 			  this.itens.push(item);
       }

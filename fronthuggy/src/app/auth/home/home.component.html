@@ -71,6 +71,11 @@
                           <option *ngFor="let req of prioritylist" [value]="req.id">{{req.name}}</option>
                         </select>
                       </div>
+                      <div class="col-md-2 filterinput" *ngIf="isadmin">
+                        <select class="form-control m-b" id="satisfaction_rating" [(ngModel)]="filtros.satisfaction_rating">
+                          <option *ngFor="let req of satisfactionlist" [value]="req.id">{{req.name}}</option>
+                        </select>
+                      </div>
                       <div class="col-md-1 filterinput">
                         <button type="button" class="btn btn-primary btn-md" id="btn_pesquisar" (click)="filter()">
                           <i class="fa fa-search"></i>
@@ -89,6 +94,7 @@
                       <th>Solicitante</th>
                       <th>Prioridade</th>
                       <th>Empresa</th>
+                      <th *ngIf="isadmin">Satisfação</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -101,9 +107,10 @@
                         <td>{{item.tags}}</td>
                         <td>{{item.type}}</td>
                         <td>{{item.status}}</td>
-                        <td>{{item.requester_id}}</td>
+                        <td>{{item.requester_name}}</td>
                         <td>{{item.priority}}</td>
                         <td>{{item.organization_name}}</td>
+                        <td *ngIf="isadmin">{{item.satisfaction_rating}}</td>
                       </tr>
                     </tbody>
                   </table>
