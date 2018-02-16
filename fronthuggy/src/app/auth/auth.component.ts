@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { ApiService } from './../global/api.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -12,7 +13,8 @@ export class AuthComponent implements OnInit {
   public password:string = '';
 
   constructor(
-    public api: ApiService
+    public api: ApiService,
+    public router: Router
   ) { }
 
   ngOnInit() {
@@ -31,7 +33,9 @@ export class AuthComponent implements OnInit {
     (res) => {
       console.log(res);
       // set localstorage
+      // localStorage.setItem('token', res.token);
       // enter
+      this.router.navigate(['/home']);
     },
     (err) => {
       console.error(err);

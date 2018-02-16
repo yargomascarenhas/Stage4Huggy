@@ -7,20 +7,19 @@ import { AuthModule } from "./auth/auth.module";
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { FormsModule  } from "@angular/forms";
-import { PagesModule } from './pages/pages.module';
-
+import { ThemeModule } from './theme/theme.module';
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
-    PagesModule,
     BrowserModule,
     FormsModule,
     HttpModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    ThemeModule,
     AppRouting,
     AuthModule
   ],

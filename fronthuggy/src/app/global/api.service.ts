@@ -27,22 +27,22 @@ export class ApiService {
   }
 
   public get(endpoint: string, loading: boolean = true) {
-      return this.http.get(this.url + '/' + endpoint, this.options);
+      return this.http.get(this.url + '/' + endpoint, this.options).map(resp => resp.json());
   }
 
   public post(endpoint: string, body: any, loading: boolean = true) {
-      return this.http.post(this.url + '/' + endpoint, body, this.options);
+      return this.http.post(this.url + '/' + endpoint, body, this.options).map(resp => resp.json());
   }
 
   public put(endpoint: string, body: any, loading: boolean = true) {
-      return this.http.put(this.url + '/' + endpoint, body, this.options);
+      return this.http.put(this.url + '/' + endpoint, body, this.options).map(resp => resp.json());
   }
 
   public delete(endpoint: string, body: any) {
-      return this.http.delete(this.url + '/' + endpoint, this.options);
+      return this.http.delete(this.url + '/' + endpoint, this.options).map(resp => resp.json());
   }
 
   public patch(endpoint: string, body: any) {
-      return this.http.patch(this.url + '/' + endpoint, body, this.options);
+      return this.http.patch(this.url + '/' + endpoint, body, this.options).map(resp => resp.json());
   }
 }
