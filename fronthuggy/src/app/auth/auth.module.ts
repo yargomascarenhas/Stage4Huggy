@@ -1,3 +1,4 @@
+import { ReportsComponent } from './reports/reports.component';
 import { ThemeModule } from './../theme/theme.module';
 import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './auth.guard';
@@ -17,7 +18,8 @@ import { AuthComponent } from './auth.component';
   ],
   declarations: [
     AuthComponent,
-    HomeComponent
+    HomeComponent,
+    ReportsComponent
   ],
   providers: [ApiService, AuthGuard]
 })

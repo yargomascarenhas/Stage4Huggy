@@ -8,10 +8,14 @@ import { Router } from '@angular/router';
 })
 export class NavigationComponent implements OnInit {
   public user:any = {};
+  public isadmin:boolean = false;
   constructor(public router: Router) {}
 
   ngOnInit() {
     this.user = (localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')) : {};
+    if(this.user.perfil) {
+      this.isadmin = (this.user.perfil == 'admin') ? true : false;
+    }
   }
 
   activeRoute(routename: string): boolean{
