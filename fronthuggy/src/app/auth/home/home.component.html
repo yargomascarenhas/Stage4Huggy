@@ -83,23 +83,27 @@
                     <tr>
                       <th>Id</th>
                       <th>Titulo</th>
+                      <th>Keywords</th>
                       <th>Tipo</th>
                       <th>Status</th>
                       <th>Solicitante</th>
                       <th>Prioridade</th>
+                      <th>Empresa</th>
                     </tr>
                     </thead>
                     <tbody>
                       <tr *ngIf="!itens.length">
-                        <td colspan="6">Nenhum registro encontrado</td>
+                        <td colspan="7">Nenhum registro encontrado</td>
                       </tr>
                       <tr *ngFor="let item of itens">
                         <td>{{item.api_id}}</td>
                         <td>{{item.subject}}</td>
+                        <td>{{item.tags}}</td>
                         <td>{{item.type}}</td>
                         <td>{{item.status}}</td>
                         <td>{{item.requester_id}}</td>
                         <td>{{item.priority}}</td>
+                        <td>{{item.organization_name}}</td>
                       </tr>
                     </tbody>
                   </table>
